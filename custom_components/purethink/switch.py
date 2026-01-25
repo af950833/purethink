@@ -3,8 +3,6 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from .const import DOMAIN
 from .protocol import generate_command
-from . import mqtt_client 
-
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
@@ -113,7 +111,7 @@ class PowerSwitch(SwitchEntity):
                 self.hass,
                 **kwargs
             )
-            mqtt_client.publish (self._command_topic, payload, qos=1)
+            self.hass.data[DOMAIN][self._entry.entry_id]["mqtt"].publish(self._command_topic, payload, qos=1)
             _LOGGER.debug(f"[PowerSwitch] Command sent ▶ {payload}")
         except Exception as e:
             _LOGGER.error(f"[PowerSwitch] 명령 전송 실패: {e}", exc_info=True)
