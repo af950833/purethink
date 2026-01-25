@@ -1,13 +1,21 @@
 reset_filter:
-  name: "Reset Filter"
-  description: "Resets either the prefilter or the HEPA filter."
+  name: Reset filter
+  description: Reset prefilter or hepafilter hours counter.
   fields:
     filter_type:
+      name: Filter type
+      description: prefilter 또는 hepafilter
       required: true
-      example: "prefilter"
+      example: prefilter
       selector:
         select:
           options:
-            - "prefilter"
-            - "hepafilter"
-          mode: dropdown
+            - prefilter
+            - hepafilter
+    device_id:
+      name: Device ID
+      description: (옵션) 여러 기기가 등록된 경우 대상 기기의 device_id (예: DIV01-AB1234)
+      required: false
+      example: DIV01-AB1234
+      selector:
+        text:
