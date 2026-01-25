@@ -4,8 +4,6 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from .const import DOMAIN, FAN_SPEEDS, PRESSURE_MODES
 from .protocol import generate_command
-from . import mqtt_client 
-
 _LOGGER = logging.getLogger(__name__)
 
 # custom_components/purethink/select.py
@@ -60,7 +58,7 @@ class BaseSelect(SelectEntity):
                 self.hass,
                 **{self._entity_type: option}
             )
-            mqtt_client.publish(self._command_topic, payload, qos=1)
+            self.hass.data[DOMAIN][self._entry_id]["mqtt"].publish(self._command_topic, payload, qos=1)
             _LOGGER.debug(f"[{self.__class__.__name__}] Command sent ▶ {payload}")
         except Exception as e:
             _LOGGER.error(f"[{self.__class__.__name__}] 명령 전송 실패: {e}", exc_info=True)
@@ -115,7 +113,7 @@ class DeviceModeSelect(SelectEntity):
                 last_fan_speed = entry_data.get("last_fan_speed", 4)
                 _LOGGER.debug(f"[DeviceModeSelect] Normal 모드 복귀 - 저장된 Fan Speed: {last_fan_speed}")
 
-                mqtt_client.publish(
+                self.hass.data[DOMAIN][self._entry.entry_id]["mqtt"].publish(
                     self._command_topic,
                     generate_command(
                         self._entry.data["device_id"],
@@ -131,7 +129,7 @@ class DeviceModeSelect(SelectEntity):
                 self.hass,
                 mode=option
             )
-            mqtt_client.publish (self._command_topic, payload, qos=1)
+            self.hass.data[DOMAIN][self._entry.entry_id]["mqtt"].publish(self._command_topic, payload, qos=1)
             _LOGGER.debug(f"[DeviceModeSelect] Command sent ▶ {payload}")
 
         except Exception as e:
@@ -181,7 +179,7 @@ class FanModeSelect(SelectEntity):
                 self.hass,
                 fan_mode=option
             )
-            mqtt_client.publish (self._command_topic, payload, qos=1)
+            self.hass.data[DOMAIN][self._entry.entry_id]["mqtt"].publish(self._command_topic, payload, qos=1)
             _LOGGER.debug(f"[FanModeSelect] Command sent ▶ {payload}")
         except Exception as e:
             _LOGGER.error(f"[FanModeSelect] 명령 전송 실패: {e}", exc_info=True)
