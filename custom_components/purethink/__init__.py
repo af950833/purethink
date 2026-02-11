@@ -19,7 +19,7 @@ MQTT_PORT = 8885
 
 def _create_tls_context() -> ssl.SSLContext:
     """TLS 설정 (인증서 검증 비활성화)"""
-    context = ssl.create_default_context()
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     context.check_hostname = False
     context.verify_mode = ssl.CERT_NONE
     return context
@@ -192,3 +192,4 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id, None)
 
     return unload_ok
+
