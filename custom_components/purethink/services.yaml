@@ -14,8 +14,9 @@ reset_filter:
             - hepafilter
     device_id:
       name: Device ID
-      description: (옵션) 여러 기기가 등록된 경우 대상 기기의 device_id (예: DIV01-AB1234)
+      description: "(옵션) 여러 기기가 등록된 경우 대상 기기의 device_id (예: DIV01-AB1234)"
       required: false
       example: DIV01-AB1234
       selector:
         text:
+
